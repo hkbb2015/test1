@@ -5,40 +5,39 @@
     <title>TTS Test</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script type="text/javascript">
+        function sendRequest(){
+            //submit request to web server (AJAX)
+            $.ajax({
+                url : 'voice',
+                type : 'POST',
+                data : {
+                    'input' : $("#input").val()
+                },
+                success : function(audioFilename) {
+                    if (audioFilename=="ERR")
+                        alert('Error')
+                    else
+                        playAudio(audioFilename); //send request to access_file(filename)
+                },
+             });
+        }
 
-    function sendRequest(){
-        //submit request to web server (AJAX)
-        $.ajax({
-            url : 'voice',
-            type : 'POST',
-            data : {
-                'input' : $("#input").val()
-            },
-            success : function(audioFilename) {
-                if (audioFilename=="ERR")
-                    alert('Error')
-                else
-                    playAudio(audioFilename); //send request to access_file(filename)
-            },
-         });
-    }
+        function playAudio(filename){
+            //play audio
+            var audio= document.createElement('AUDIO');
+            audio.setAttribute('controls', true);
+            var source = document.createElement('source');
+            source.src = filename;
+            audio.playbackRate = 1.5;
+            audio.appendChild(source)
+            audio.play()
+        }
 
-    function playAudio(filename){
-        //play audio
-        var audio= document.createElement('AUDIO');
-        audio.setAttribute('controls', true);
-        var source = document.createElement('source');
-        source.src = filename;
-		audio.playbackRate = 1.5;
-        audio.appendChild(source)
-        audio.play()
-    }
-	
-	$(function(){
-		$("#btnPlay").click(function(){
-			sendRequest();
-		});
-	});
+        $(function(){
+            $("#btnPlay").click(function(){
+                sendRequest();
+            });
+        });
     </script>
 </head>
 <body>
